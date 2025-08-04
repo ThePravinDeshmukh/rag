@@ -17,25 +17,30 @@ class EnhancedRAG:
     """Enhanced RAG system with better structured data handling"""
     
     def __init__(self):
-        """Initialize with lightweight models"""
+        """Initialize with lightweight models and lazy loading for memory optimization"""
         print("🤖 Initializing Enhanced RAG...")
         
-        # Device detection
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        # Device detection (CPU only for free tier)
+        self.device = "cpu"  # Force CPU for Render.com free tier
         print(f"Device: {self.device}")
         
-        # Load models
-        print("Loading models...")
-        self.embedder = SentenceTransformer('all-MiniLM-L6-v2')
-        
-        # Storage
+        # Initialize containers
         self.chunks = []
         self.structured_data = []  # Store structured entries separately
         self.embeddings = None
         self.index = None
         self.sources = []
         
+        # Lazy load models (don't load until needed to save memory)
+        self.embedder = None
+        
         print("✅ Enhanced RAG ready!")
+    
+    def _ensure_models_loaded(self):
+        """Lazy load models only when needed"""
+        if self.embedder is None:
+            print("📦 Loading embedding model...")
+            self.embedder = SentenceTransformer('all-MiniLM-L6-v2', device=self.device)
     
     def extract_structured_data(self, text, source_file):
         """Extract structured data (item-weight pairs) from text with item-weight on separate lines"""
@@ -232,12 +237,15 @@ class EnhancedRAG:
         return len(self.chunks) > 0
     
     def build_index(self):
-        """Build search index from chunks"""
+        """Build search index from chunks with lazy model loading"""
         if not self.chunks:
             print("❌ No chunks to index")
             return False
         
         print("🔍 Building search index...")
+        
+        # Ensure models are loaded
+        self._ensure_models_loaded()
         
         # Create embeddings for text chunks
         self.embeddings = self.embedder.encode(self.chunks, show_progress_bar=True)
