@@ -11,7 +11,7 @@ except ImportError:
     FLASK_AVAILABLE = False
     exit(1)
 
-from rag_simple import SimpleRAG
+from rag import EnhancedRAG
 import os
 
 app = Flask(__name__)
@@ -21,11 +21,11 @@ def init_rag():
     """Initialize RAG system once"""
     global rag
     if rag is None:
-        rag = SimpleRAG()
+        rag = EnhancedRAG()
         if os.path.exists('docs'):
             if rag.load_folder('docs'):
                 rag.build_index()
-                print("✅ RAG system ready")
+                print("✅ Enhanced RAG system ready")
             else:
                 print("⚠️  No documents loaded")
         else:
@@ -58,7 +58,7 @@ def home():
     </head>
     <body>
         <div class="container">
-            <h1>🤖 Simple RAG System</h1>
+            <h1>🤖 Enhanced RAG System</h1>
             
             <div class="input-group">
                 <input type="text" id="question" placeholder="Ask a question about your documents..." />
@@ -159,7 +159,7 @@ def status():
     })
 
 if __name__ == '__main__':
-    print("🌐 Starting Simple RAG Web Interface...")
+    print("🌐 Starting Enhanced RAG Web Interface...")
     print("📁 Make sure you have PDFs in the 'docs/' folder")
     print("🚀 Open: http://localhost:5000")
     
