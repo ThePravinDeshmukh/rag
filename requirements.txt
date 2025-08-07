@@ -1,5 +1,5 @@
 # Ultra-Minimal Requirements for Render.com Free Tier
-torch>=1.9.0,<2.0.0 --index-url https://download.pytorch.org/whl/cpu
+torch>=2.2.0 --index-url https://download.pytorch.org/whl/cpu
 transformers>=4.20.0,<5.0.0
 sentence-transformers>=2.2.0,<3.0.0
 faiss-cpu>=1.7.0,<2.0.0

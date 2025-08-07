@@ -1,5 +1,5 @@
 # Minimal Requirements - Only what you actually need
-torch>=1.9.0
+torch>=2.2.0
 transformers>=4.20.0  
 sentence-transformers>=2.2.0
 faiss-cpu>=1.7.0
